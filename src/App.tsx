@@ -1,6 +1,6 @@
 import {ChangeEvent, KeyboardEvent, 
   ReactElement, useState} from 'react'
-import './App.css'
+//import './App.css'
 
 function App():ReactElement {
 const [val, setVal] = useState(0)
@@ -30,7 +30,7 @@ const doType = (event:KeyboardEvent):void=> {
 let total = 0
 return (
   <div>
-      <h1 className="bg-primary text-white p-2">React sample</h1>
+      <h1 className="bg-primary text-white p-2">Task App</h1>
       <div className="container">
       <h2 className="my-3">click button!</h2>
       <div className="alert alert-primary">
