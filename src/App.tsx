@@ -11,17 +11,10 @@ const [data,setData] = useState<number[]>([])
 
 const [tasks, setTasks] = useState<Task[]>([]);
 
-const loadEvent = () => {
-  const hoge: Task[] = getTaskAll();
-  setTasks(hoge);
-  console.log(tasks);
-}
+// ロード時イベント
 window.addEventListener('load', (event) => {
   setTasks(task => getTaskAll());
-  console.log(tasks);
 });
-//window.addEventListener('load', loadEvent);
-
 
 const doChange = (event:ChangeEvent):void=> {
   const ob = event.target as HTMLInputElement
@@ -39,13 +32,11 @@ const doAction = ():void=> {
 }
 
 const doType = (event:KeyboardEvent):void=> {
-  console.log(tasks)
   if (event.code === 'Enter') {
       doAction()
   }
 }
 
-let total = 0
 return (
   <div>
     {/* ヘッダー */}
@@ -61,75 +52,42 @@ return (
           </button>
         </div>
       </div>
-      <table className="table">
-        <thead><tr><th>value</th><th>total</th></tr></thead>
+      {/* タスク一覧 */}
+      <table className="table table-striped">
+        <thead><tr><th>タスク名</th><th>状態</th><th>更新</th><th>削除</th></tr></thead>
         <tbody>
-        {data.map((v,k)=>{
-          total += v
-          return <tr key={k}><td>{v}</td><td>{total}</td></tr>
+        {tasks.map((task)=>{
+          return  (
+            // タスク列
+            <tr key={task.id}>
+              {/* タスク名 */}
+              <th>
+                <input
+                  type="text"
+                  defaultValue={task.name}
+                  // disabled={false}
+                  readOnly
+                />
+              </th>
+              {/* タスク状態 */}
+              <th>
+                <select className="dropdown-task-status" defaultValue={task.status}>
+                  <option value="1">未実行</option>
+                  <option value="2">実行中</option>
+                  <option value="3">完了</option>
+                </select>
+              </th>
+              {/* 更新ボタン */}
+              <th>
+              </th>
+              {/* 削除ボタン */}
+              <th>
+              </th>
+            </tr>
+          )
         })}
         </tbody>
       </table>
-
-      <div className="row">
-        {/* <!-- カラム01 --> */}
-        {/* <!-- カードの枠：card --> */}
-        <div className="card mb-3" style={{maxWidth: '540px'}}>
-          {/* <!-- ガターを削除 --> */}
-          <div className="row g-0">
-            {/* <!-- mdブレイクポイントで水平に --> */}
-            <div className="col-md-8">
-              {/* <!-- カードの本文 --> */}
-              <div className="card-body">
-                <h4 className="card-title">勉強する</h4>
-              </div>
-              <div className="col-md-4"></div>
-            </div>
-          </div>
-        </div>
-        {/* <!-- カラム02 --> */}
-        {/* <!-- カードの枠：card --> */}
-        <div className="card mb-3" style={{maxWidth: '540px'}}>
-          {/* <!-- ガターを削除 --> */}
-          <div className="row g-0">
-            {/* <!-- mdブレイクポイントで水平に --> */}
-            <div className="col-md-8">
-              {/* <!-- カードの本文 --> */}
-              <div className="card-body">
-                <h4 className="card-title">毎日歩く</h4>
-              </div>
-              <div className="col-md-4"></div>
-            </div>
-          </div>
-        </div>
-
-        {/* <!-- カラム02 --> */}
-        {/* <!-- カードの枠：card --> */}
-        <div className="card mb-3" style={{maxWidth: '540px'}}>
-          {/* <!-- ガターを削除 --> */}
-          <div className="row g-0">
-            {/* <!-- mdブレイクポイントで水平に --> */}
-            <div className="col-md-8">
-              {/* <!-- カードの本文 --> */}
-              <div className="card-body">
-                <h4 className="card-title">リラックスする</h4>
-              </div>
-              <div className="col-md-4"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="row">
-        {tasks.map((task) => (
-          <div>
-            {task.id}
-            {task.name}
-            {task.status}
-          </div>
-        ))}
-      </div>
-
     </div>
   </div>
 )
