@@ -16,6 +16,16 @@ window.addEventListener('load', (event) => {
   setTasks(task => getTaskAll());
 });
 
+// アップデートボタンクリック時イベント
+const onClickUpdateButton = ():void => {
+  console.log('update');
+}
+
+// デリートボタンクリック時イベント
+const onClickDeleteButton = ():void => {
+  console.log('delete');
+}
+
 const doChange = (event:ChangeEvent):void=> {
   const ob = event.target as HTMLInputElement
   const re = Number(ob.value)
@@ -43,15 +53,26 @@ return (
     <h1 className="bg-primary text-white p-2">Task App</h1>
     {/* メインコンテンツ */}
     <div className="container">
-      <h2 className="my-3">click button!</h2>
+      <h2 className="my-3">todo:ここに空白を入れる</h2>
       <div className="alert alert-primary">
         <div className="row px-2">
-          <input type="number" className="col" onChange={doChange} onKeyPress={doType} value={val} />
+          <input type="string" className="col"/>
           <button onClick={doAction} className="btn btn-primary col-2">
-            Click
+            登録
           </button>
         </div>
       </div>
+
+      {/* <form>
+        <input
+          type="text"
+          className="inputText"
+        />
+        <input type="submit" value="作成" className="submitButton" />
+      </form> */}
+
+
+
       {/* タスク一覧 */}
       <table className="table table-striped">
         <thead><tr><th>タスク名</th><th>状態</th><th>更新</th><th>削除</th></tr></thead>
@@ -65,7 +86,6 @@ return (
                 <input
                   type="text"
                   defaultValue={task.name}
-                  // disabled={false}
                   readOnly
                 />
               </th>
@@ -79,9 +99,13 @@ return (
               </th>
               {/* 更新ボタン */}
               <th>
+                <button type="button" className="btn btn-primary btn-update"
+                  onClick={ () => onClickUpdateButton() }>更新</button>
               </th>
               {/* 削除ボタン */}
               <th>
+                <button type="button" className="btn btn-danger btn-delete"
+                  onClick={ () => onClickDeleteButton() }>削除</button>
               </th>
             </tr>
           )
