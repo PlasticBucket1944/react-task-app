@@ -55,22 +55,14 @@ return (
     <div className="container">
       <h2 className="my-3">todo:ここに空白を入れる</h2>
       <div className="alert alert-primary">
-        <div className="row px-2">
-          <input type="string" className="col"/>
-          <button onClick={doAction} className="btn btn-primary col-2">
-            登録
-          </button>
-        </div>
+        <form className="row px-2">
+          <input
+            type="text"
+            className="inputText col"
+          />
+          <input type="submit" value="登録" className="button-submit btn btn-primary col-2" />
+        </form>
       </div>
-
-      {/* <form>
-        <input
-          type="text"
-          className="inputText"
-        />
-        <input type="submit" value="作成" className="submitButton" />
-      </form> */}
-
 
 
       {/* タスク一覧 */}
