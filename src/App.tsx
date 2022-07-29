@@ -1,17 +1,32 @@
-import {ChangeEvent, KeyboardEvent, 
+import React, {ChangeEvent, KeyboardEvent, 
   ReactElement, useState} from 'react'
 import {Task, TaskStauts} from './TaskEntity'; 
-import { getTaskAll } from './TaskModel';
+import { createTask, getTaskAll } from './TaskModel';
 
 //import './App.css'
 
 function App():ReactElement {
 const [tasks, setTasks] = useState<Task[]>([]);
+const [inputText, setInputText] = useState("");
 
 // ロード時イベント
-window.addEventListener('load', (event) => {
+window.addEventListener('load', (event: Event) => {
   setTasks(getTaskAll());
 });
+
+// 入力テキスト変更時イベント
+const onChangeText = (event: React.ChangeEvent<HTMLInputElement>) => {
+  event.preventDefault();
+
+  setInputText(event.target.value);
+};
+
+// 登録ボタンクリック時イベント
+const onClickRegisterButton = (event: React.FormEvent):void => {
+  if(!createTask(inputText)) {
+    alert("登録に失敗しました。");
+  } 
+}
 
 // アップデートボタンクリック時イベント
 const onClickUpdateButton = ():void => {
@@ -29,12 +44,14 @@ return (
     <h1 className="bg-primary text-white p-2">Task App</h1>
     {/* メインコンテンツ */}
     <div className="container">
-      <h2 className="my-3">todo:ここに空白を入れる</h2>
+      <h2 className="my-3">　　　</h2>
       <div className="alert alert-primary">
-        <form className="row px-2">
+        <form className="row px-2" onSubmit={(event) => onClickRegisterButton(event)}>
           <input
             type="text"
             className="inputText col"
+            maxLength={40}
+            onChange={(event) => onChangeText(event)}
           />
           <input type="submit" value="登録" className="button-submit btn btn-primary col-2" />
         </form>

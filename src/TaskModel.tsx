@@ -34,6 +34,7 @@ stubData.push(task3);
 let id: number = 3; 
 
 // Taskデータを全件取得
+// @return 全タスクデータ
 export function getTaskAll(): Task[] {
   let tasks: Task[] = [];
 
@@ -41,7 +42,7 @@ export function getTaskAll(): Task[] {
   const xhr = new XMLHttpRequest();
   xhr.open('GET', `${process.env.REACT_APP_SERVER_PATH}/tasks`, false);
   xhr.onload = () => {
-    if(xhr.status===200) {
+    if(xhr.status === 200) {
       JSON.parse(xhr.response).forEach((fetchTask: Task) => {
         const task: Task =
         {
@@ -68,15 +69,16 @@ export function getTaskById(id: string): Task {
 }
 
 // Taskを新規作成
-export function createTask(name: string): void {
-  let task: Task =
-  {
-    id: String(++id),
-    name: name,
-    status: TaskStauts.NOT_EXECUTED,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
+// @return true:正常成功 false:登録失敗
+export function createTask(name: string): boolean {
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', `${process.env.REACT_APP_SERVER_PATH}/tasks`, false);
+  xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
+  xhr.send('name=' + encodeURIComponent(name));
+  if(xhr.status === 201) {
+    return true;
+  }
+  return false;
 }
 
 // Taskを更新
