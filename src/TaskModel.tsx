@@ -41,24 +41,22 @@ export function getTaskAll(): Task[] {
   // サーバーからタスクデータを取得
   const xhr = new XMLHttpRequest();
   xhr.open('GET', `${process.env.REACT_APP_SERVER_PATH}/tasks`, false);
-  xhr.onload = () => {
-    if(xhr.status === 200) {
-      JSON.parse(xhr.response).forEach((fetchTask: Task) => {
-        const task: Task =
-        {
-          id: fetchTask.id,
-          name: fetchTask.name,
-          status: fetchTask.status,
-          createdAt: fetchTask.createdAt,
-          updatedAt: fetchTask.updatedAt,
-        };
-        tasks.push(task);
-      });
-    } else {
-      throw Error('通信に失敗しました。');
-    }
-  }
   xhr.send(null);
+  if(xhr.status === 200) {
+    JSON.parse(xhr.response).forEach((fetchTask: Task) => {
+      const task: Task =
+      {
+        id: fetchTask.id,
+        name: fetchTask.name,
+        status: fetchTask.status,
+        createdAt: fetchTask.createdAt,
+        updatedAt: fetchTask.updatedAt,
+      };
+      tasks.push(task);
+    });
+  } else {
+    throw Error('通信に失敗しました。');
+  }
 
   return tasks;
 }
