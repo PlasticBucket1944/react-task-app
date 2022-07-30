@@ -62,8 +62,20 @@ export function getTaskAll(): Task[] {
 }
 
 // TaskデータをId指定で取得
+// @return 引数で指定したタスクデータ
 export function getTaskById(id: string): Task {
-  return stubData.find(task => task.id === id) as Task;
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', `${process.env.REACT_APP_SERVER_PATH}/tasks/${id}`, false);
+  xhr.send(null);
+
+  switch (xhr.status) {
+    case 200:
+      return JSON.parse(xhr.responseText) as Task;
+    case 400:
+      throw Error('データが見つかりませんでした。');
+    default:
+      throw Error('通信に失敗しました。');
+  }
 }
 
 // Taskを新規作成
