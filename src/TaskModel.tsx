@@ -69,7 +69,7 @@ export function getTaskById(id: string): Task {
 }
 
 // Taskを新規作成
-// @return true:正常成功 false:登録失敗
+// @return true:登録成功 false:登録失敗
 export function createTask(name: string): boolean {
   const xhr = new XMLHttpRequest();
   xhr.open('POST', `${process.env.REACT_APP_SERVER_PATH}/tasks`, false);
