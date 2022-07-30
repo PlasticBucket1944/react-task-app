@@ -92,6 +92,7 @@ return (
               <th>
                 <input
                   type="text"
+                  size={83 /* 全角40文字分のスペースを確保 */ }
                   defaultValue={task.name}
                   readOnly
                 />
