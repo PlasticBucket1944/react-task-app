@@ -1,7 +1,7 @@
 import React, {ChangeEvent, KeyboardEvent, 
   ReactElement, useState} from 'react'
 import {Task, TaskStauts} from './TaskEntity'; 
-import { createTask, getTaskAll } from './TaskModel';
+import { createTask, daleteTask, getTaskAll } from './TaskModel';
 
 //import './App.css'
 
@@ -33,9 +33,13 @@ const onClickUpdateButton = ():void => {
   console.log('update');
 }
 
-// デリートボタンクリック時イベント
-const onClickDeleteButton = ():void => {
-  console.log('delete');
+// 削除ボタンクリック時イベント
+const onClickDeleteButton = (id: string):void => {
+  if(!daleteTask(id))
+  {
+    alert("削除に失敗しました。");
+  }
+  window.location.reload();
 }
 
 return (
@@ -90,7 +94,7 @@ return (
               {/* 削除ボタン */}
               <th>
                 <button type="button" className="btn btn-danger btn-delete"
-                  onClick={ () => onClickDeleteButton() }>削除</button>
+                  onClick={ () => onClickDeleteButton(task.id) }>削除</button>
               </th>
             </tr>
           )

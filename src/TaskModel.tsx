@@ -99,6 +99,15 @@ export function updateTask(id: string, stauts: TaskStauts): void {
 }
 
 // Taskを削除
-export function daleteTask(id: string): void {
-  throw Error('仮置きの処理が複雑になりそうなので実装しない');
+// @return true:削除成功 false:削除失敗
+export function daleteTask(id: string): boolean {
+  const xhr = new XMLHttpRequest();
+  xhr.open('DELETE', `${process.env.REACT_APP_SERVER_PATH}/tasks/${id}`, false);
+  xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
+  xhr.send(null);
+  console.log(xhr.status);
+  if(xhr.status === 200) {
+    return true;
+  } 
+  return false;
 }
