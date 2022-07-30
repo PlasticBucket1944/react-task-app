@@ -92,10 +92,17 @@ export function createTask(name: string): boolean {
 }
 
 // Taskを更新
-export function updateTask(id: string, stauts: TaskStauts): void {
-  let found = getTaskById(id);
-  if(!found) throw Error('検索に失敗しました。');
-  found.status = stauts;
+// @return true:更新成功 false:更新失敗
+export function updateTask(task: Task): boolean {
+  const xhr = new XMLHttpRequest();
+  xhr.open('PATCH', `${process.env.REACT_APP_SERVER_PATH}/tasks/${task.id}`, false);
+  xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
+  xhr.send('status=' + encodeURIComponent(task.status));
+  // TODO: 真偽値ではなくステータスコードを返す方向にする
+  if(xhr.status === 200) {
+    return true;
+  }
+  return false;
 }
 
 // Taskを削除
