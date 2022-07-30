@@ -1,37 +1,4 @@
-import {Task, TaskStauts} from './TaskEntity'; 
-
-// 仮データ
-let stubData: Task[] = [];
-let task1: Task =
-{
-  id: '1',
-  name: 'task1',
-  status: TaskStauts.NOT_EXECUTED,
-  createdAt: '2022-07-21',
-  updatedAt: '2022-07-21',
-};
-let task2: Task =
-{
-  id: '2',
-  name: 'task2',
-  status: TaskStauts.EXECUTION,
-  createdAt: '2022-07-22',
-  updatedAt: '2022-07-22',
-};
-let task3: Task =
-{
-  id: '3',
-  name: 'task3',
-  status: TaskStauts.COMPLETE,
-  createdAt: '2022-07-23',
-  updatedAt: '2022-07-23',
-};
-stubData.push(task1);
-stubData.push(task2);
-stubData.push(task3);
-
-// 仮採番ID
-let id: number = 3; 
+import {Task} from './TaskEntity'; 
 
 // Taskデータを全件取得
 // @return 全タスクデータ
@@ -85,6 +52,7 @@ export function createTask(name: string): boolean {
   xhr.open('POST', `${process.env.REACT_APP_SERVER_PATH}/tasks`, false);
   xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
   xhr.send('name=' + encodeURIComponent(name));
+  // TODO: 真偽値ではなくステータスコードを返す方向にする
   if(xhr.status === 201) {
     return true;
   }
@@ -112,7 +80,7 @@ export function daleteTask(id: string): boolean {
   xhr.open('DELETE', `${process.env.REACT_APP_SERVER_PATH}/tasks/${id}`, false);
   xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
   xhr.send(null);
-  console.log(xhr.status);
+  // TODO: 真偽値ではなくステータスコードを返す方向にする
   if(xhr.status === 200) {
     return true;
   } 

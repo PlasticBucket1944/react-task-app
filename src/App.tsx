@@ -1,6 +1,5 @@
-import React, {ChangeEvent, KeyboardEvent, 
-  ReactElement, useState} from 'react'
-import {Task, TaskStauts} from './TaskEntity'; 
+import React, {ReactElement, useState} from 'react'
+import {Task} from './TaskEntity'; 
 import { createTask, daleteTask, getTaskAll, updateTask } from './TaskModel';
 
 //import './App.css'
@@ -22,7 +21,7 @@ const onChangeText = (event: React.ChangeEvent<HTMLInputElement>) => {
 };
 
 // 登録ボタンクリック時イベント
-const onClickRegisterButton = (event: React.FormEvent):void => {
+const onClickRegisterButton = ():void => {
   if(!createTask(inputText)) {
     alert("登録に失敗しました。");
   } 
@@ -69,7 +68,7 @@ return (
     <div className="container">
       <h2 className="my-3">　　　</h2>
       <div className="alert alert-primary">
-        <form className="row px-2" onSubmit={(event) => onClickRegisterButton(event)}>
+        <form className="row px-2" onSubmit={() => onClickRegisterButton()}>
           <input
             type="text"
             className="inputText col"
