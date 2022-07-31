@@ -1,57 +1,127 @@
-import {ChangeEvent, KeyboardEvent, 
-  ReactElement, useState} from 'react'
-import './App.css'
+import React, {ReactElement, useState} from 'react'
+import {Task} from './TaskEntity'; 
+import { createTask, daleteTask, getTaskAll, updateTask } from './TaskModel';
+
+//import './App.css'
 
 function App():ReactElement {
-const [val, setVal] = useState(0)
-const [data,setData] = useState<number[]>([])
+const [tasks, setTasks] = useState<Task[]>([]);
+const [inputText, setInputText] = useState("");
 
-const doChange = (event:ChangeEvent):void=> {
-  const ob = event.target as HTMLInputElement
-  const re = Number(ob.value)
-  setVal(re)
+// ロード時イベント
+window.addEventListener('load', (event: Event) => {
+  setTasks(getTaskAll());
+});
+
+// 入力テキスト変更時イベント
+const onChangeText = (event: React.ChangeEvent<HTMLInputElement>) => {
+  event.preventDefault();
+
+  setInputText(event.target.value);
+};
+
+// 登録ボタンクリック時イベント
+const onClickRegisterButton = ():void => {
+  if(!createTask(inputText)) {
+    alert("登録に失敗しました。");
+  } 
 }
 
-const doAction = ():void=> {
-  const arr:number[] = []
-  for (let item of data)
-      arr.push(item)
-  arr.push(val)
-  setData(arr)
-  setVal(0)
+// タスク状態変更時イベント
+const onChangeTaskStatus = (id: string, status: string):void => {
+  // ミューテート対応の為、新たに配列を作成
+  const temp: Task[] = tasks.map((task) => ({ ...task }));
+ 
+  // タスク状態の変更を反映したタスク配列を作成
+  const newTasks: Task[] = temp.map((task) => {
+    if(task.id === id) {
+      task.status = Number(status);
+    }
+    return task;
+  });
+
+  setTasks(newTasks);
 }
 
-const doType = (event:KeyboardEvent):void=> {
-  if (event.code == 'Enter') {
-      doAction()
+// 更新ボタンクリック時イベント
+const onClickUpdateButton = (task: Task):void => {
+  if(!updateTask(task)) {
+    alert("更新に失敗しました。");
   }
+  window.location.reload();
 }
 
-let total = 0
+// 削除ボタンクリック時イベント
+const onClickDeleteButton = (id: string):void => {
+  if(!daleteTask(id))
+  {
+    alert("削除に失敗しました。");
+  }
+  window.location.reload();
+}
+
 return (
   <div>
-      <h1 className="bg-primary text-white p-2">React sample</h1>
-      <div className="container">
-      <h2 className="my-3">click button!</h2>
+    {/* ヘッダー */}
+    <h1 className="bg-primary text-white p-2">Task App</h1>
+    {/* メインコンテンツ */}
+    <div className="container">
+      <h2 className="my-3">　　　</h2>
       <div className="alert alert-primary">
-          <div className="row px-2">
-              <input type="number" className="col"
-                  onChange={doChange} onKeyPress={doType} value={val} />
-              <button onClick={doAction} className="btn btn-primary col-2">
-                  Click
-              </button>
-          </div>
+        <form className="row px-2" onSubmit={() => onClickRegisterButton()}>
+          <input
+            type="text"
+            className="inputText col"
+            maxLength={40}
+            onChange={(event) => onChangeText(event)}
+          />
+          <input type="submit" value="登録" className="button-submit btn btn-primary col-2" />
+        </form>
       </div>
-      <table className="table">
-          <thead><tr><th>value</th><th>total</th></tr></thead>
-          <tbody>
-          {data.map((v,k)=>{
-              total += v
-              return <tr key={k}><td>{v}</td><td>{total}</td></tr>
-          })}
-          </tbody>
+
+
+      {/* タスク一覧テーブル */}
+      <table className="table table-striped">
+        <thead><tr><th>タスク名</th><th>状態</th><th>更新</th><th>削除</th></tr></thead>
+        <tbody>
+        {tasks.map((task)=>{
+          return  (
+            // タスク列
+            <tr key={task.id}>
+              {/* タスク名 */}
+              <th>
+                <input
+                  type="text"
+                  size={83 /* 全角40文字分のスペースを確保 */ }
+                  defaultValue={task.name}
+                  readOnly
+                />
+              </th>
+              {/* タスク状態 */}
+              <th>
+                <select className="dropdown-task-status" defaultValue={task.status}
+                  onChange={ (event) => onChangeTaskStatus(task.id, event.target.value) } >
+                  <option value="1">未実行</option>
+                  <option value="2">実行中</option>
+                  <option value="3">完了</option>
+                </select>
+              </th>
+              {/* 更新ボタン */}
+              <th>
+                <button type="button" className="btn btn-primary btn-update"
+                  onClick={ () => onClickUpdateButton(task) }>更新</button>
+              </th>
+              {/* 削除ボタン */}
+              <th>
+                <button type="button" className="btn btn-danger btn-delete"
+                  onClick={ () => onClickDeleteButton(task.id) }>削除</button>
+              </th>
+            </tr>
+          )
+        })}
+        </tbody>
       </table>
-      </div>
+    </div>
   </div>
 )
 }
